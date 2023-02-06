@@ -2,10 +2,11 @@ import React, { Suspense, useState } from 'react';
 import {
  ZapparCamera, InstantTracker, ZapparCanvas, BrowserCompatibility,
 } from '@zappar/zappar-react-three-fiber';
+
 import { useLoader } from '@react-three/fiber';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Html } from '@react-three/drei';
-
+import moment from 'moment'
 
 function Model() {
   const gltf = useLoader(GLTFLoader, "./assets/mug.glb")
@@ -49,18 +50,28 @@ function Lights() {
 function App() {
   const [placementMode, setPlacementMode] = useState(true);
 
+  const handleClick = ()=>{
+    const canvas = document.querySelector('canvas');
+    // const url = canvas!.toDataURL('image/jpeg', 0.8);
+
+    const date = new Date()
+    const link = document.createElement('a');
+    link.download = `${moment(date).format('YYYY-MM-DD_HH:mm:ss')}.png`;
+    link.href = canvas!.toDataURL('image/jpeg', 0.8);
+    link.click();
+  }
+
   return (
-    <>
+    <React.Fragment>
       <BrowserCompatibility />
-      <ZapparCanvas shadows >
+      <ZapparCanvas shadows gl={{ preserveDrawingBuffer: true }} >
         <ZapparCamera environmentMap poseMode="anchor-origin" />
           <InstantTracker placementMode={placementMode} placementCameraOffset={[0, 0, -2]}>
-            <Suspense fallback={<Html><div style={{color: "white", fontWeight: "bold"}}>Model Loading...</div></Html>}>
+            <Suspense fallback={<Html><div style={{color: "white", fontWeight: "bold"}}>正在載入模組...</div></Html>}>
               <Model />
             </Suspense>
             <Lights />
           </InstantTracker>
-
       </ZapparCanvas>
       <div
         id="zappar-button"
@@ -69,11 +80,20 @@ function App() {
         tabIndex={0}
         onClick={() => { setPlacementMode(((currentPlacementMode) => !currentPlacementMode)); }}
       >
-        Tap here to
-        {placementMode ? ' place ' : ' pick up '}
-        the object
+        點擊這邊
+        {placementMode ? ' 放置 ' : ' 拿起 '}
+        物件
       </div>
-    </>
+      <div
+        id="screenshot-button"
+        role="button"
+        tabIndex={1}
+        onClick={handleClick}
+      >
+        拍照
+      </div>
+    
+    </React.Fragment>
   );
 }
 

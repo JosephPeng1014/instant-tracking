@@ -1,4 +1,4 @@
-html, body, #root {
+html, body, #root, #main-canvas {
   width: 100%;
   height: 100%;
   margin: 0;
@@ -9,7 +9,22 @@ html, body, #root {
 
 #zappar-button {
 	position: absolute;
-	bottom: 30px;
+	bottom: 70px;
+	width: 200px;
+	left: calc(50% - 100px);
+	z-index: 1000;
+	background-color: rgba(0, 0, 0, 0.8);
+	color: white;
+	text-align: center;
+	font-family: sans-serif;
+	padding: 10px;
+	border-radius: 5px;
+	position: "absolute"
+}
+
+#screenshot-button {
+	position: absolute;
+	bottom: 10px;
 	width: 200px;
 	left: calc(50% - 100px);
 	z-index: 1000;
